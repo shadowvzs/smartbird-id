@@ -1,0 +1,197 @@
+html, body, #root {
+  height: 100%;
+  min-height: 100%;
+  background-color: #EFF5FF;
+}
+
+.tree, .tree ul, .tree ol {
+  list-style: none;
+  display: inline-flex;
+}
+.tree, .tree * {
+  margin: 0;
+  padding: 0;
+}
+.tree li {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.tree li::before {
+  content: "";
+  position: absolute;
+}
+.tree li::after {
+  content: "";
+  position: absolute;
+}
+.tree ul, .tree ol {
+  position: relative;
+}
+.tree ul::before, .tree ol::before {
+  content: "";
+  position: absolute;
+}
+.tree span {
+  border: 1px solid;
+  text-align: center;
+  padding: 0.33em 0.66em;
+}
+.tree > li {
+  padding: 0;
+}
+.tree > li::before, .tree > li::after {
+  display: none;
+}
+
+.tree.-horizontal, .tree.-horizontal ul, .tree.-horizontal ol {
+  flex-direction: column;
+}
+.tree.-horizontal li {
+  flex-direction: row;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  padding-left: 2vw;
+  padding-right: 0;
+}
+.tree.-horizontal li::before {
+  left: 0;
+  right: unset;
+  top: 50%;
+  border-top: 1px solid;
+  width: 2vw;
+}
+.tree.-horizontal li::after {
+  left: 0;
+  border-left: 1px solid;
+  border-right: 0;
+}
+.tree.-horizontal li:last-of-type::after {
+  height: 50%;
+  top: 0;
+}
+.tree.-horizontal li:first-of-type::after {
+  height: 50%;
+  bottom: 0;
+}
+.tree.-horizontal li:not(:first-of-type):not(:last-of-type)::after {
+  height: 100%;
+}
+.tree.-horizontal ul, .tree.-horizontal ol {
+  padding-left: 2vw;
+  padding-right: 0;
+}
+.tree.-horizontal ul::before, .tree.-horizontal ol::before {
+  left: 0;
+  right: unset;
+  top: 50%;
+  border-top: 1px solid;
+  width: 2vw;
+}
+.tree.-horizontal > li {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.tree.-horizontal.-inverse li {
+  flex-direction: row-reverse;
+  padding-left: 0;
+  padding-right: 2vw;
+}
+.tree.-horizontal.-inverse li::before {
+  right: 0;
+  left: unset;
+}
+.tree.-horizontal.-inverse li::after {
+  right: 0;
+  border-left: 0;
+  border-right: 1px solid;
+}
+.tree.-horizontal.-inverse ul, .tree.-horizontal.-inverse ol {
+  padding-left: 0;
+  padding-right: 2vw;
+}
+.tree.-horizontal.-inverse ul::before, .tree.-horizontal.-inverse ol::before {
+  right: 0;
+  left: unset;
+}
+.tree.-horizontal.-inverse > li {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.tree.-vertical, .tree.-vertical ul, .tree.-vertical ol {
+  flex-direction: row;
+}
+.tree.-vertical li {
+  flex-direction: column;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
+  padding-top: 2vh;
+  padding-bottom: 0;
+}
+.tree.-vertical li::before {
+  top: 0;
+  bottom: unset;
+  left: 50%;
+  border-left: 1px solid;
+  height: 2vh;
+}
+.tree.-vertical li::after {
+  top: 0;
+  border-top: 1px solid;
+  border-bottom: 0;
+}
+.tree.-vertical li:last-of-type::after {
+  width: 50%;
+  left: 0;
+}
+.tree.-vertical li:first-of-type::after {
+  width: 50%;
+  right: 0;
+}
+.tree.-vertical li:not(:first-of-type):not(:last-of-type)::after {
+  width: 100%;
+}
+.tree.-vertical ul, .tree.-vertical ol {
+  padding-top: 2vh;
+  padding-bottom: 0;
+}
+.tree.-vertical ul::before, .tree.-vertical ol::before {
+  top: 0;
+  bottom: unset;
+  left: 50%;
+  border-left: 1px solid;
+  height: 2vh;
+}
+.tree.-vertical > li {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.tree.-vertical.-inverse li {
+  flex-direction: column-reverse;
+  padding-top: 0;
+  padding-bottom: 2vh;
+}
+.tree.-vertical.-inverse li::before {
+  top: unset;
+  bottom: 0;
+}
+.tree.-vertical.-inverse li::after {
+  bottom: 0;
+  border-bottom: 1px solid;
+  border-top: 0;
+}
+.tree.-vertical.-inverse ul, .tree.-vertical.-inverse ol {
+  padding-top: 0;
+  padding-bottom: 2vh;
+}
+.tree.-vertical.-inverse ul::before, .tree.-vertical.-inverse ol::before {
+  top: unset;
+  bottom: 0;
+}
+.tree.-vertical.-inverse > li {
+  padding-top: 0;
+  padding-bottom: 0;
+}
