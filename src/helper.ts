@@ -1,5 +1,5 @@
 import type { TreeItemData } from "./component/Tree";
-import type { CertificateData, SearchGrouping } from "./types";
+import type { CertificateData, SaleStatusData, ScreenState, SearchGrouping } from "./types";
 
 export const fileDataURL = (file: File): Promise<string> => new Promise((resolve,reject) => {
     const fr = new FileReader();
@@ -67,7 +67,50 @@ export const birdSearchGrouping = (birds: CertificateData[], grouping: SearchGro
     return groups;
 };
 
-const sexToUnicodeCharacter = {
+export const getBirdContactInfo = (bird: CertificateData) => {
+    const contact = (bird.statusData as SaleStatusData)?.contact;
+    if (contact) {
+        const contactInfo = contact.split(/,;/).map((item) => item.trim());
+        return  contactInfo.reduce((acc, item) => {
+            item = item.replace(/ /g, ''); // remove all whitespace
+            if (item.startsWith('phone:') || item.match(/^\+?\d{10,15}$/)) {
+                acc.phone = item.replace('phone:', '').trim(); // remove non-digit characters
+            } else if (item.startsWith('email:') || item.includes('@')) {
+                acc.email = item.replace('email:', '').trim();
+            } else if (item.startsWith('social:') || item.includes('https://')) {
+                acc.socialMedia = item.replace('social:', '').trim();
+            }
+            return acc;
+        }, { phone: '', email: '', socialMedia: '' });
+    }
+    return {
+        phone: '',
+        email: '',
+        socialMedia: ''
+    };
+};
+
+export const getParentPage = (screen: ScreenState) => {
+    const { previous } = screen;
+    const parentPage = [...previous].reverse().find((page) => page === 'market' || page === 'search');
+    return parentPage;
+};
+
+const dayInMilliseconds = 1000 * 60 * 60 * 24; // Average day length in milliseconds
+const monthInMilliseconds = dayInMilliseconds * 30; // Average month length in milliseconds
+const yearInMilliseconds = dayInMilliseconds * 365.25; // Average year length in milliseconds
+export const ageCalculator = (dateString: string) => {
+    const age = Date.now() - new Date(dateString).getTime();
+    if (age < monthInMilliseconds) {
+        return `${Math.floor(age / dayInMilliseconds)} days`;
+    } else if (age < yearInMilliseconds) {
+        return `${Math.floor(age / monthInMilliseconds)} months`;
+    } else {
+        return `${Math.floor(age / yearInMilliseconds)} years`;
+    }
+};
+
+export const sexToUnicodeCharacter = {
     'm': '♂',
     'f': '♀',
     '-': '?' // Neutral or unknown
@@ -139,3 +182,16 @@ export const getSuggestionsBasedOnData = (birds: CertificateData[]) => {
 
     return suggestions;
 };
+
+export const availableGroupingOptions: [string, string][] = [
+    ['none', 'None'],
+    ['year', 'Year'],
+    ['specie', 'Species'],
+    ['country', 'Country'],
+    ['status', 'Status'],
+];
+
+export const availableGroupingDirection: [string, string][] = [
+    ['ASC', 'Ascending'],
+    ['DESC', 'Descending'],
+];

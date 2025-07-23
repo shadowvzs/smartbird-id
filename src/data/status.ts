@@ -5,4 +5,5 @@ export const birdStatuses: BirdStatus[] = [
     'escaped',
     'died',
     'retired',
+    'for sale',
 ];

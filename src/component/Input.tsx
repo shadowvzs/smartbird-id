@@ -3,6 +3,7 @@ import { useCallback, useContext, type InputHTMLAttributes } from "react";
 import { FormContext } from "./FormContext";
 import { Label } from "./Label";
 import { Icon, type IconName } from "../assets/icons";
+import { inputStateSetter, inputValueGetter } from "./helper";
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'name'> {
     suggestions?: string[];
@@ -14,7 +15,7 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'name'>
 export const Input = ({ onChange, endIcon, suggestions, label, className = '', onClick, ...props }: InputProps) => {
     const state = useContext<object>(FormContext);
     const snap = useSnapshot(state);
-    const value = Reflect.get(snap, props.name) ?? '';
+    const value = inputValueGetter(snap, props.name);
 
     // minor hotfix, because if the list too long then it will show on the right side of the screen
     if (suggestions && suggestions.length > 10) {
@@ -22,9 +23,9 @@ export const Input = ({ onChange, endIcon, suggestions, label, className = '', o
     }
 
     const onChangeHandler = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
-        Reflect.set(state, props.name, ev.currentTarget.value);
+        inputStateSetter(ev.currentTarget, state);
         onChange?.(ev);
-    }, [props.name, state, onChange]);
+    }, [ state, onChange]);
 
     const labelCmp = label ? (
         <Label htmlFor={props.name}>

@@ -19,6 +19,13 @@ export const translations: Record<string, Record<string, string>> = {
         'Preview': 'Preview',
         'Share': 'Share',
         'Print': 'Print',
+        'Price': 'Price',
+        'Location': 'Location',
+        'Trade to': 'Trade to',
+        'Added at': 'Added at',
+        'yes': 'yes',
+        'no': 'no',
+        'Learn more about': 'Learn more about',
     },
     de: {
         'Ring ID': 'Ring ID',
@@ -39,5 +46,12 @@ export const translations: Record<string, Record<string, string>> = {
         'Preview': 'Vorschau',
         'Share': 'Teilen',
         'Print': 'Drucken',
+        'Price': 'Preis',
+        'Location': 'Standort',
+        'Trade to': 'Handel zu',
+        'Added at': 'Hinzugefügt am',
+        'yes': 'ja',
+        'no': 'nein',
+        'Learn more about': 'Erfahren Sie mehr über',
     }
 }

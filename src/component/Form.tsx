@@ -14,7 +14,6 @@ export function Form<T extends object>({ children, onSend, className = '', ...pr
         const data = props.value;
 
         if (onSend) {
-            console.log('Form submitted with data:', data);
             onSend(data);
         }
     };

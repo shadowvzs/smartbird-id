@@ -3,17 +3,20 @@ import { store } from '../store';
 import { Button } from '../component/Button';
 import { Input } from '../component/Input';
 import { Form } from '../component/Form';
-import type { CertificateData } from '../types';
-import { availableGroupingDirection, availableGroupingOptions, birdSearchGrouping, getSuggestionsBasedOnData } from '../helper';
+import type { CertificateData, SaleStatusData } from '../types';
+import { ageCalculator, availableGroupingDirection, availableGroupingOptions, birdSearchGrouping, getSuggestionsBasedOnData, sexToUnicodeCharacter } from '../helper';
 import { birds } from '../data/birds';
 import { Select } from '../component/Select';
 import { Icon } from '../assets/icons';
+import { Label } from '../component/Label';
 
 interface SearchItemProps {
     data: CertificateData;
 }
 const SearchItem = ({ data }: SearchItemProps) => {
     const image = data.photos[0];
+    const { price, currency, location, negotiable } = data.statusData as SaleStatusData;
+    const age = ageCalculator(data.hatchDate);
     return (
         <div className='inline-block m-2 text-center cursor-pointer' onClick={() => store.openSearchResult(data)}>
             {image && (
@@ -21,24 +24,26 @@ const SearchItem = ({ data }: SearchItemProps) => {
                     <img src={data.photos[0]} alt={data.ringId} className="w-16 h-16 object-fill rounded" />
                 </figure>
             )}
-            <div className="text-xs font-semibold">{data.ringId}</div>
-            <div className="text-xs text-gray-500 truncate">{data.specie} - {data.hatchDate.substring(0, 4)}</div>
+            <div className="text-xs font-semibold">{price} {negotiable === 'yes' ? '(neg)' : ''} {currency} - {sexToUnicodeCharacter[data.sex]}</div>
+            {location && (<div className="text-xs text-gray-500">{location} - {data.country}</div>)}
+            <div className="text-xs text-gray-500 truncate">{data.specie} - {age}</div>
         </div>
     );
 };
 
 const SearchResults = () => {
-    const search = useSnapshot(store.search);
-    if (!search.results || search.results.length === 0) {
+    const market = useSnapshot(store.market);
+    console.log('Market results', market.results);
+    if (!market.results || market.results.length === 0) {
         return <div className="text-center text-gray-500 w-full">No results found</div>;
     }
 
-    if (search.results.length > 100) {
+    if (market.results.length > 100) {
         return <div className="text-center text-gray-500">Too many results, please refine your search</div>;
     }
 
-    const results = (search.results || [] ) as CertificateData[];
-    if (search.grouping.key === 'none') {
+    const results = (market.results || [] ) as CertificateData[];
+    if (market.grouping.key === 'none') {
         return (
             <div>
                 {results.map((bird: CertificateData) => (
@@ -48,9 +53,9 @@ const SearchResults = () => {
         );
     }
 
-    const groups = birdSearchGrouping(results, search.grouping);
+    const groups = birdSearchGrouping(results, market.grouping);
     const enties = Object.entries(groups);
-    if (search.grouping.dir === 'DESC') {
+    if (market.grouping.dir === 'DESC') {
         enties.reverse();
     }
 
@@ -86,7 +91,14 @@ const FilterDrawer = () => {
                 </div>
                 <div className="w-full">
                     <h2 className="text-lg font-semibold mb-4">Filter</h2>
-                    <Form value={store.search.filter} className='flex-col gap-4' onSend={store.searchBirds}>
+                    <Form value={store.market.filter} className='flex-col gap-4' onSend={store.searchBirds}>
+                        {
+                            <div className='flex items-center gap-2'>
+                                <Label className='text-nowrap'> Price range</Label>
+                                <Input name='minPrice' placeholder='Min' />-
+                                <Input name='maxPrice' placeholder='Max' />
+                            </div>
+                        }
                         <Input name='specie' placeholder='Specie' suggestions={species} label={'Specie'} />
                         <Input name='country' placeholder='Country' suggestions={countries} label={'Country'} />
                         <Input name='status' placeholder='Status' suggestions={statuses} label={'Status'} />
@@ -100,7 +112,7 @@ const FilterDrawer = () => {
 
                 <div className="w-full">
                     <h2 className="text-lg font-semibold mb-4">Group</h2>
-                    <Form value={store.search.grouping} className='flex-col gap-4' onSend={store.searchBirds}>
+                    <Form value={store.market.grouping} className='flex-col gap-4' onSend={store.searchBirds}>
                         <Select name='key' label={'Group by'} options={availableGroupingOptions} />
                         <Select name='dir' label={'Direction'} options={availableGroupingDirection} />
                         <div className='text-center'>
@@ -114,12 +126,12 @@ const FilterDrawer = () => {
     );
 };
 
-export const SearchScreen = () => {
+export const MarketScreen = () => {
     return (
         <article className="flex flex-col h-full items-center h-full">
             <header className="text-2xl font-bold p-2 flex items-center w-full pt-4">
                 <Icon name='left' className='inline-block mx-4 cursor-pointer' onClick={store.goBack} />
-                <Form value={store.search} className='flex-row gap-2 no-wrap items-center' onSend={store.searchBirds}>
+                <Form value={store.market} className='flex-row gap-2 no-wrap items-center' onSend={store.searchBirds}>
                     <Input name='text' placeholder='Search' endIcon='search' onClick={store.searchBirds}/>
                     <div>
                         <Button type='button' onClick={() => { store.drawer.filter = true }} appearance='default'>

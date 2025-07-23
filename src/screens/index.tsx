@@ -6,15 +6,16 @@ import { AddBirdScreen } from "./AddBirdScreen";
 import { PreviewBirdScreen } from "./PreviewBirdScreen";
 import { SearchScreen } from "./SearchScreen";
 import { screenStyle } from "./style";
+import { MarketScreen } from "./MarketScreen";
 
 const screenMap = {
     system: PhoneSystemScreen,
     home: HomeScreen,
     search: SearchScreen,
+    market: MarketScreen,
     newBird: AddBirdScreen,
     previewBird: PreviewBirdScreen,
     settings: HomeScreen,
-    
 } as const;
 
 export type Routes = keyof typeof screenMap;

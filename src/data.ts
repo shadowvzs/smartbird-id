@@ -21,6 +21,6 @@ export const newBirdData: CertificateData = {
     // prefilled based the current user
     breeder: 'Nagy Imre',
     breederId: 'nihu11',
-    status: 'in breeding flock',
+    status: 'active',
     hatchDate: new Date().toISOString().split('T')[0], // current date in YYYY-MM-DD format
 }

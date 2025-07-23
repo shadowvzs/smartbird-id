@@ -4,9 +4,11 @@ import { SearchIcon } from "./SearchIcon";
 import { SettingsIcon } from "./SettingsIcon";
 import { QuitIcon } from "./QuitIcon";
 import { CameraIcon } from "./CameraIcon";
-import { Button, type ButtonProps } from "../../component/Button";
 import { LeftIcon } from "./LeftIcon";
 import { CloseIcon } from "./CloseIcon";
+import { InfoIcon } from "./InfoIcon";
+import { MarketIcon } from "./MarketIcon";
+import { Button, type ButtonProps } from "../../component/Button";
 
 const iconMap = {
     addDocument: AddDocument,
@@ -15,7 +17,9 @@ const iconMap = {
     settings: SettingsIcon,
     quit: QuitIcon,
     left: LeftIcon,
-    close: CloseIcon
+    close: CloseIcon,
+    info: InfoIcon,
+    market: MarketIcon,
 } as const;
 
 export type IconName = keyof typeof iconMap;
